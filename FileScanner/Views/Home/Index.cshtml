@@ -1,0 +1,65 @@
+﻿@using FileScanner.Domain.Models;
+@model Dictionary<string, List<FileItem>>;
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" type="text/css" href="~/css/style.css" />
+    <title>Тестовое задание</title>
+</head>
+<body>
+    <a href="@Url.Action("DownloadPage", "Home")" class="button-download">Скачать страницу</a>
+    <h3>Статистика по MimeType</h3>
+    <table>
+        <tr>
+            <th>MimeType</th>
+            <th>Количество</th>
+            <th>Процентное соотношение</th>
+            <th>Средний размер (в байтах)</th>
+        </tr>
+        @foreach (var stat in ViewBag.MimeTypeStatistics)
+        {
+            <tr>
+                <td>@stat.MimeType</td>
+                <td>@stat.Count</td>
+                <td>@stat.Percentage %</td>
+                <td>@stat.AverageSize</td>
+            </tr>
+        }
+    </table>
+    <div class="files">
+        <button id="toggleButton">Показать всё</button>
+    </div>
+    <div id="infoList" style="display: none;">
+        @foreach (var group in Model)
+        {
+            <h3 class="mime">@group.Key</h3>
+            @foreach (var item in group.Value)
+            {
+                <div class="item">
+                    <p>Название: @item.Name</p>
+                    <p>MimeType: @item.MimeType</p>
+                    <p>Размер: @item.Size байт</p>
+                </div>
+            }
+        }
+    </div>
+    
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var toggleButton = document.getElementById('toggleButton');
+            var infoList = document.getElementById('infoList');
+
+            toggleButton.addEventListener('click', function () {
+                if (infoList.style.display === 'none') {
+                    infoList.style.display = 'block';
+                } else {
+                    infoList.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
