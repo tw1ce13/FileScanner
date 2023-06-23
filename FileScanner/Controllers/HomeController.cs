@@ -19,10 +19,10 @@ namespace FileScanner.Controllers
         {
             List<string> files = new List<string>();
             string currentDirectory = Directory.GetCurrentDirectory();
-            DirectoryInfo parentDirectory = Directory.GetParent(currentDirectory).Parent;
+            DirectoryInfo? parentDirectory = Directory.GetParent(currentDirectory)!.Parent;
             try
             {
-                files = await ScanDirectory(parentDirectory.FullName);
+                files = await ScanDirectory(parentDirectory!.FullName);
                 items = await GetInformation(files);
             }
             catch (UnauthorizedAccessException ex)
@@ -33,10 +33,10 @@ namespace FileScanner.Controllers
             {
                 Console.WriteLine($"Ошибка при сканировании: {ex.Message}");
             }
-            var groupedItems = items.GroupBy(x => x.MimeType)
+            var groupedItems = items!.GroupBy(x => x.MimeType)
                         .ToDictionary(g => g.Key, g => g.ToList());
 
-            var totalCount = items.Count;
+            var totalCount = items!.Count;
 
             var mimeTypeStatistics = groupedItems
                 .Select(group => new
@@ -163,10 +163,10 @@ namespace FileScanner.Controllers
 
         public IActionResult DownloadPage()
         {
-            var groupedItems = items.GroupBy(x => x.MimeType)
+            var groupedItems = items!.GroupBy(x => x.MimeType)
                         .ToDictionary(g => g.Key, g => g.ToList());
 
-            var totalCount = items.Count;
+            var totalCount = items!.Count;
 
             var mimeTypeStatistics = groupedItems
                 .Select(group => new
